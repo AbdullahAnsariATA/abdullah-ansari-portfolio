@@ -2,19 +2,13 @@ import { useGSAP } from "@gsap/react";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import AnimatedHeaderSection from "../components/AnimatedHeaderSection";
 import Marquee from "../components/Marquee";
-import { socials } from "../constants";
+import { content } from "../content";
 import gsap from "gsap";
 
 const Contact = () => {
-  const text = `Got an app idea or a role in mind?
-    I’d love to hear from you and discuss further!`;
-  const items = [
-    "Say Hello",
-    "Start A Project",
-    "Open For Work",
-    "Let's Chat",
-    "Get In Touch",
-  ];
+  const { subTitle, title, text, email, phone, marquee: items } =
+    content.contact;
+  const { socials } = content;
   useGSAP(() => {
     gsap.from(".social-link", {
       y: 100,
@@ -35,8 +29,8 @@ const Contact = () => {
     >
       <div>
         <AnimatedHeaderSection
-          subTitle={"You Dream It, I Code it"}
-          title={"Contact"}
+          subTitle={subTitle}
+          title={title}
           text={text}
           textColor={"text-white"}
           withScrollTrigger={true}
@@ -47,14 +41,14 @@ const Contact = () => {
               <h2>E-mail</h2>
               <div className="w-full h-px my-2 bg-white/30" />
               <p className="text-xl tracking-wider lowercase md:text-2xl lg:text-3xl">
-                abdullah.tariq.ansariata@gmail.com
+                {email}
               </p>
             </div>
             <div className="social-link">
               <h2>Phone</h2>
               <div className="w-full h-px my-2 bg-white/30" />
               <p className="text-xl lowercase md:text-2xl lg:text-3xl">
-                +92 316 0120286
+                {phone}
               </p>
             </div>
             <div className="social-link">

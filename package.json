@@ -5,9 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:fullstack": "vite --mode fullstack",
     "build": "vite build",
+    "build:fullstack": "vite build --mode fullstack",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preview:fullstack": "vite preview --mode fullstack"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

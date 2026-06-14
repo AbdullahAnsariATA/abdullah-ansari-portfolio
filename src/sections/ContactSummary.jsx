@@ -2,23 +2,12 @@ import { useRef } from "react";
 import Marquee from "../components/Marquee";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import { content } from "../content";
 
 const ContactSummary = () => {
   const containerRef = useRef(null);
-  const items = [
-    "Innovation",
-    "Precision",
-    "Trust",
-    "Collaboration",
-    "Excellence",
-  ];
-  const items2 = [
-    "contact us",
-    "contact us",
-    "contact us",
-    "contact us",
-    "contact us",
-  ];
+  const { marqueeTop: items, marqueeBottom: items2, headline } =
+    content.contactSummary;
 
   useGSAP(() => {
     gsap.to(containerRef.current, {
@@ -39,10 +28,12 @@ const ContactSummary = () => {
       <Marquee items={items} />
       <div className="overflow-hidden font-light text-center contact-text-responsive">
         <p>
-          “ Let’s build a <br />
-          <span className="font-normal">memorable</span> &{" "}
-          <span className="italic">inspiring</span> <br />
-          mobile app <span className="text-gold">together</span> “
+          “ {headline.line1} <br />
+          <span className="font-normal">{headline.emphasis1}</span>{" "}
+          {headline.conjunction}{" "}
+          <span className="italic">{headline.emphasis2}</span> <br />
+          {headline.line2}{" "}
+          <span className="text-gold">{headline.accent}</span> “
         </p>
       </div>
       <Marquee

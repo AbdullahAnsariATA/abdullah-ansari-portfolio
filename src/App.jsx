@@ -9,6 +9,7 @@ import Works from "./sections/Works";
 import ContactSummary from "./sections/ContactSummary";
 import Contact from "./sections/Contact";
 import { useProgress } from "@react-three/drei";
+import { content } from "./content";
 
 const App = () => {
   const { progress } = useProgress();
@@ -19,6 +20,10 @@ const App = () => {
       setIsReady(true);
     }
   }, [progress]);
+
+  useEffect(() => {
+    document.title = content.meta.title;
+  }, []);
 
   return (
     <ReactLenis root className="relative w-screen min-h-screen overflow-x-hidden">

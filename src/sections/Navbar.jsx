@@ -3,9 +3,11 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Link } from "react-scroll";
-import { socials } from "../constants";
+import { content } from "../content";
 
 const Navbar = () => {
+  const { socials, nav } = content;
+  const { email } = content.contact;
   const navRef = useRef(null);
   const linksRef = useRef([]);
   const contactRef = useRef(null);
@@ -105,7 +107,7 @@ const Navbar = () => {
         className="fixed z-50 flex flex-col justify-between w-full h-full px-10 uppercase bg-black text-white/80 py-28 gap-y-10 md:w-1/2 md:left-1/2"
       >
         <div className="flex flex-col text-5xl gap-y-2 md:text-6xl lg:text-8xl">
-          {["home", "services", "about", "works", "contact"].map(
+          {nav.map(
             (section, index) => (
               <div key={index} ref={(el) => (linksRef.current[index] = el)}>
                 <Link
@@ -128,7 +130,7 @@ const Navbar = () => {
           <div className="font-light">
             <p className="tracking-wider text-white/50">E-mail</p>
             <p className="text-sm tracking-widest lowercase text-pretty">
-              abdullah.tariq.ansariata@gmail.com
+              {email}
             </p>
           </div>
           <div className="font-light">
