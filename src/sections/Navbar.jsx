@@ -1,0 +1,187 @@
+import React, { useEffect, useRef, useState } from "react";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { Link } from "react-scroll";
+import { socials } from "../constants";
+
+const Navbar = () => {
+  const navRef = useRef(null);
+  const linksRef = useRef([]);
+  const contactRef = useRef(null);
+  const topLineRef = useRef(null);
+  const bottomLineRef = useRef(null);
+  const tl = useRef(null);
+  const iconTl = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [showBurger, setShowBurger] = useState(true);
+  
+  useGSAP(() => {
+    gsap.set(navRef.current, { xPercent: 100 });
+    gsap.set([linksRef.current, contactRef.current], {
+      autoAlpha: 0,
+      x: -20,
+    });
+
+    tl.current = gsap
+      .timeline({ paused: true })
+      .to(navRef.current, {
+        xPercent: 0,
+        duration: 1,
+        ease: "power3.out",
+      })
+      .to(
+        linksRef.current,
+        {
+          autoAlpha: 1,
+          x: 0,
+          stagger: 0.1,
+          duration: 0.5,
+          ease: "power2.out",
+        },
+        "<"
+      )
+      .to(
+        contactRef.current,
+        {
+          autoAlpha: 1,
+          x: 0,
+          duration: 0.5,
+          ease: "power2.out",
+        },
+        "<+0.2"
+      );
+
+    iconTl.current = gsap
+      .timeline({ paused: true })
+      .to(topLineRef.current, {
+        rotate: 45,
+        y: 3.3,
+        duration: 0.3,
+        ease: "power2.inOut",
+      })
+      .to(
+        bottomLineRef.current,
+        {
+          rotate: -45,
+          y: -3.3,
+          duration: 0.3,
+          ease: "power2.inOut",
+        },
+        "<"
+      );
+  }, []);
+
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Keep burger visible when navbar is open, otherwise hide/show based on scroll direction
+      setShowBurger(isOpen || currentScrollY <= lastScrollY || currentScrollY < 10);
+
+      lastScrollY = currentScrollY;
+    };
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isOpen]);
+
+  const toggleMenu = () => {
+    if (isOpen) {
+      tl.current.reverse();
+      iconTl.current.reverse();
+    } else {
+      tl.current.play();
+      iconTl.current.play();
+    }
+    setIsOpen(!isOpen);
+  };
+  return (
+    <>
+      <nav
+        ref={navRef}
+        className="fixed z-50 flex flex-col justify-between w-full h-full px-10 uppercase bg-black text-white/80 py-28 gap-y-10 md:w-1/2 md:left-1/2"
+      >
+        <div className="flex flex-col text-5xl gap-y-2 md:text-6xl lg:text-8xl">
+          {["home", "services", "about", "works", "contact"].map(
+            (section, index) => (
+              <div key={index} ref={(el) => (linksRef.current[index] = el)}>
+                <Link
+                  className="transition-all duration-300 cursor-pointer hover:text-white"
+                  to={`${section}`}
+                  smooth
+                  offset={0}
+                  duration={2000}
+                >
+                  {section}
+                </Link>
+              </div>
+            )
+          )}
+        </div>
+        <div
+          ref={contactRef}
+          className="flex flex-col flex-wrap justify-between gap-8 md:flex-row md:items-end"
+        >
+          <div className="font-light">
+            <p className="tracking-wider text-white/50">E-mail</p>
+            <p className="text-sm tracking-widest lowercase text-pretty">
+              abdullah.tariq.ansariata@gmail.com
+            </p>
+          </div>
+          <div className="font-light">
+            <p className="mb-3 tracking-wider text-white/50">Social Media</p>
+            <div className="flex flex-wrap items-center gap-3">
+              {socials && socials.length > 0 ? (
+                socials.map((social, index) => (
+                  <a
+                    key={index}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative flex items-center gap-2 px-4 py-2 overflow-hidden uppercase border rounded-full group border-white/30 hover:border-gold"
+                  >
+                    <span className="absolute inset-0 origin-bottom transition-transform duration-300 ease-out scale-y-0 bg-gold group-hover:scale-y-100" />
+                    <Icon
+                      icon={social.icon}
+                      className="relative z-10 transition-colors duration-300 size-4 group-hover:text-black"
+                    />
+                    <span className="relative z-10 text-xs tracking-widest transition-colors duration-300 group-hover:text-black">
+                      {social.name}
+                    </span>
+                  </a>
+                ))
+              ) : (
+                <span className="text-sm text-white/50">
+                  No social links available
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div
+        className="fixed z-50 flex flex-col items-center justify-center gap-1 transition-all duration-300 bg-black rounded-full cursor-pointer w-14 h-14 md:w-20 md:h-20 top-4 right-10"
+        onClick={toggleMenu}
+        style={
+          showBurger
+            ? { clipPath: "circle(50% at 50% 50%)" }
+            : { clipPath: "circle(0% at 50% 50%)" }
+        }
+      >
+        <span
+          ref={topLineRef}
+          className="block w-8 h-0.5 bg-white rounded-full origin-center"
+        ></span>
+        <span
+          ref={bottomLineRef}
+          className="block w-8 h-0.5 bg-white rounded-full origin-center"
+        ></span>
+      </div>
+    </>
+  );
+};
+
+export default Navbar;
